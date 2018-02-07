@@ -37,7 +37,11 @@ exit 0
 # Validate packages
 checksumPackages() {
   echo "Checking if required packages are present and valid..."
-  md5sum -c Checksum.$DISTRIBUTION
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    md5 -r Checksum.$DISTRIBUTION
+  else
+    md5sum -c Checksum.$DISTRIBUTION
+  fi
   if [ "$?" -ne 0 ]; then
     echo "MD5 for required packages to build this image did not match!"
     echo "Make sure to download missing files in folder $VERSION. See *.download files for more information"
